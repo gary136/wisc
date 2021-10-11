@@ -1,0 +1,12 @@
+ls
+ls -al
+pwd
+cd ..
+ls
+path
+ls
+path /bin/
+ls
+ls -al > ou
+cat ou
+exit
