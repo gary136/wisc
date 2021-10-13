@@ -6,20 +6,18 @@
 #include <stdbool.h>
 #include <sys/types.h>  
 #include <sys/wait.h>
+#include <ctype.h>
 
-size_t MAXARGS = 128;
-size_t MAXBUFR = 1024;
-size_t PATHBUFR = 200;
+size_t MAXARGS = 64;
+size_t MAXBUFR = 128;
+size_t line_buf_size, characters;
 char *prompt = "wish> ";
-char *path[20];
-int pathsize, line_size;
-size_t line_buf_size;
-int loopargc;
 char *builtins[5] = {"not used", "exit", "cd", "path", "loop"};  
 char error_message[30] = "An error has occurred\n";
+char *path[20];
 // char buf[100];
 // char loopbuf[100];
-int isSyscall, rdrc, looptime;
+int pathsize, line_size, loopargc, isSyscall, rdrc, looptime;
 FILE *fp;    
 char *batchpath, *line_buf, *loopcmd;
 
@@ -29,32 +27,55 @@ struct command {
 	char *alterpath;
 };
 
-void parse(char *cmdline, struct command *cmd) {
-	// check info
-	// printf("\nparsing %s\n", cmdline);
+int allspace(char *cmdline) {
+	for (int i=0; i<strlen(cmdline); i++) {
+		if (isspace(cmdline[i])==0) return 0;
+	}
+	// printf("allspace\n");
+	return 1;
+}
 
+void parse(char *cmdline, struct command *cmd) {
+	// printf("\nparsing %s\n", cmdline);
 	// inilize
 	cmd->argc=0;
+	// printf("is this readonly\n");
 	char *tok;	
-	// sep line via space
-	while (strstr(cmdline, " ")) {
-		tok = strsep(&cmdline, " ");
-		cmd->argv[cmd->argc] = tok;
-		cmd->argc++;
+	// check allspace
+	if (allspace(cmdline)==1) {
+		// cmd->argv[cmd->argc] = NULL; // mark the end
+	} else {
+		// sep line via space
+		while (strstr(cmdline, " ")) {
+			tok = strsep(&cmdline, " ");
+			// printf("tok:%s|\n", tok);
+			if(strcmp(tok, "")!=0 && strcmp(tok, "\t")!=0) {
+				cmd->argv[cmd->argc] = tok;
+				cmd->argc++;
+			} else {
+				// printf("isspace\n");
+			}
+		}
+		// add last one
+		tok = cmdline;
+		cmdline = "";
+		if(strcmp(tok, "")!=0 && strcmp(tok, "\t")!=0) {
+			cmd->argv[cmd->argc] = tok;
+			cmd->argc++;
+		} else {
+			// printf("isspace\n");
+		}
+		cmd->argv[cmd->argc] = NULL; // mark the end
+		// check info
+		// if (cmd->argc!=0) {
+		// 	printf("cmd->argc: %d | ", cmd->argc);
+		// 	printf("cmd->argv: ");
+		// 	for (int i=0; i<cmd->argc; i++) printf("%s, ", cmd->argv[i]);
+		// 	printf("\n");
+		// } else {
+		// 	// printf("cmd->argc: %d\n", cmd->argc);
+		// }
 	}
-	// add last one
-	tok = cmdline;
-	cmdline = "";
-	cmd->argv[cmd->argc] = tok;
-	cmd->argc++;
-	cmd->argv[cmd->argc] = NULL; // mark the end
-
-	// check info
-	// printf("after parsing\n");
-	// printf("cmd->argc: %d | ", cmd->argc);
-	// printf("cmd->argv: ");
-	// for (int i=0; i<cmd->argc; i++) printf("%s, ", cmd->argv[i]);
-	// printf("\n");
 }
 
 int translate(struct command *cmd) { 
@@ -74,7 +95,7 @@ int translate(struct command *cmd) {
 		// printf("try %s\n", buf);
 		if (access(buf, X_OK)!=-1) { // path[i] work
 			// cmd->argv[0] = buf;
-			cmd->alterpath = (char *)malloc(PATHBUFR * sizeof(char));
+			cmd->alterpath = (char *)malloc(MAXBUFR * sizeof(char));
 			cmd->alterpath = buf; // replace i cmd->argv[0]
 			// printf("is system call\n");
 			return 1;
@@ -105,7 +126,6 @@ int checkredirection (struct command *cmd) { // find the position of ">" in cmd-
 			// printf("find > in position %d | str=%s\n", i, cmd->argv[i]);
 			return i;
 		}
-
 	}
 	// printf("none redirection\n");
 	return 0;
@@ -152,50 +172,62 @@ void runCommand(struct command *cmd, int isSyscall, int rdrc) {
 					}
 				} else { // there is > in code
 					// check only > or contain >
-					char * args[3];
+					char *args[3];
 					if(strcmp(cmd->argv[rdrc], ">")==0) { // rdrc = index of ">" in cmd->argv
 						close(STDOUT_FILENO);
 						open(cmd->argv[rdrc+1], O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU); // rdrc+1 = index of file
-						args[0] = cmd->alterpath;
+						args[0] = cmd->alterpath; 
 						if (rdrc==1) args[1] = NULL;
 						else if (rdrc==2) {
 							args[1] = cmd->argv[1];
 							args[2] = NULL;
 						}
 					} else { // cmd->argv[rdrc] == tests/p2a-test>/tmp/output11
-						printf("detects > in %s | len=%d\n", cmd->argv[rdrc], strlen(cmd->argv[rdrc]));
 						int position;
-						char* beforeT;
-						char* afterT;
+						char *beforeT;
+						char *afterT;						
+						char *Trgt;
+						char x;
+						Trgt = (char *)malloc(MAXBUFR * sizeof(char));
+						strcpy(Trgt, "");
+						strcat(Trgt, cmd->argv[rdrc]); 
 						beforeT = (char *)malloc(MAXBUFR * sizeof(char));
 						afterT = (char *)malloc(MAXBUFR * sizeof(char));
-						for (int i=0; i<strlen(cmd->argv[rdrc]); i++) {
-							if(strcmp(cmd->argv[rdrc][i], ">")==0) position=i;
+
+						// printf("detects > in %s | len=%d\n", Trgt, strlen(Trgt));
+						for (int i=0; i<strlen(Trgt); i++) {
+							// printf("%d\n", i);
+							x = Trgt[i];
+							if(strcmp(&x, ">")==0) {
+								// printf("find %c in %d\n", x, i);
+								position=i;
+							}
 						}
+						// printf("detects > in %s | len=%d\n", Trgt, strlen(Trgt));
 						for (int i=0; i<position; i++) {
-							beforeT[i] = cmd->argv[rdrc][i];
+							// printf("%d\n", i);
+							beforeT[i] = Trgt[i];
 						}
-						for (int i=position; i<strlen(cmd->argv[rdrc]); i++) {
-							afterT[i] = cmd->argv[rdrc][i];
+						for (int i=position+1; i<strlen(Trgt); i++) {
+							// printf("%d %d\n", i-position-1, i);
+							afterT[i-position-1] = Trgt[i];
 						}
 						// check
-						printf("position: %d beforeT %s afterT %s", position, beforeT, afterT);		
+						// printf("position: %lu | beforeT %s | afterT %s\n", position, beforeT, afterT);		
 
-						// close(STDOUT_FILENO);
-						// open(cmd->argv[rdrc+1], O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU); // rdrc+1 = index of file
-						// args[0] = cmd->alterpath;
+						close(STDOUT_FILENO);
+						open(afterT, O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU); // afterT = file
+						args[0] = cmd->alterpath;
 						// if (rdrc==1) args[1] = NULL;
 						// else if (rdrc==2) {
-						// 	args[1] = cmd->argv[1];
-						// 	args[2] = NULL;
-						}				
+							args[1] = beforeT;
+							args[2] = NULL;
+						// }				
 					}
-
 					if (execv(args[0], args) < 0) {
 						write(STDERR_FILENO, error_message, strlen(error_message)); 
 						exit(1);
 					}
-
 				}
 			} else { // find bad cmnd and will not executed
 				// printf("find bad cmnd\n");
@@ -219,57 +251,102 @@ void runCommand(struct command *cmd, int isSyscall, int rdrc) {
 				// overwrite
 				pathsize=cmd->argc-1;
 				for (int i=0; i<pathsize; i++) {
-					path[i] = cmd->argv[i+1];
+					// path[i] = cmd->argv[i+1];
+					path[i] = (char *)malloc(MAXBUFR * sizeof(char));
+					strcpy(path[i], "");
+					strcat(path[i], cmd->argv[i+1]); // /bin
 				}
-				// check
+				// // check
 				// printf("path is overwritten to: ");
 				// for (int i=0; i<pathsize; i++) printf("%s, ", path[i]);
-				// printf("\n");
+				// printf("| pathsize = %d\n", pathsize);	
 			} else if(bltn==4) { // loop
-				// format loop 5 echo hello $loop
-				// cmd->argv[0] loop
-				// cmd->argv[1] looptime
-				// cmd->argv[2] syscall 
-				// there will not be builtin here
-
-				looptime = atoi(cmd->argv[1]); 
-				// printf("looptime: %d\n", looptime);
-				// create another sturct to rec
-				struct command *loop;	
-				// reconstruct cmd
-				char *loopbuf;
-				loopbuf = (char *)malloc(MAXBUFR * sizeof(char));
-				// printf("%d\n", strlen(loopbuf));
-				// for (int i=0; i <100; i++) loopbuf[i] = '\0';
-				// printf("container: %s\n", loopbuf);
-				strcpy(loopbuf, "");
-				for (int i=2; i<cmd->argc; i++) {					
-					strcat(loopbuf, cmd->argv[i]);
-					if (i!=cmd->argc-1) strcat(loopbuf, " ");
-				}
-				// printf("container: %s\n", loopbuf);
-				parse(loopbuf, loop);
-				// printf("container: %s\n", loopbuf);
-				isSyscall = translate(loop);
-				while (looptime>0) {
-					childPid = fork();
-					// printf("\nchildPid: %d\n", childPid);
-					if (childPid<0) {
+				// filter bad cmnd
+				if (cmd->argc<2) { // no argument
+					write(STDERR_FILENO, error_message, strlen(error_message)); 
+				} else {
+					looptime = atoi(cmd->argv[1]); 
+					if (looptime<=0) {
 						write(STDERR_FILENO, error_message, strlen(error_message)); 
+					} else {
+						// format loop 5 echo hello $loop
+						// cmd->argv[0] loop
+						// cmd->argv[1] looptime
+						// cmd->argv[2] syscall 
+						// there will not be builtin here						
+						int argc = cmd->argc-2;
+						char *buf;
+						char *args[argc];
+						for (int i=0; i<argc; i++) {
+							// buf = (char *)malloc(MAXBUFR * sizeof(char));
+							// strcpy(buf, "");
+							// strcat(buf, cmd->argv[i+2]); // /bin	
+							if (strcmp(cmd->argv[i+2], "$loop")==0)	{
+								cmd->argv[i+2]=cmd->argv[1];
+							}
+							// strcat(loopbuf, cmd->argv[i]);
+							args[i] = cmd->argv[i+2];
+							// if (i!=cmd->argc-1) strcat(loopbuf, " ");
+						}
+
+						// check
+						// printf("argc: %d\n", argc);
+						// for (int i=0; i<argc; i++) {					
+						// 	// strcat(loopbuf, cmd->argv[i]);
+						// 	printf("args[%d]: %s\n", i, args[i]);
+						// 	// if (i!=cmd->argc-1) strcat(loopbuf, " ");
+						// }
+						args[argc] = NULL;
+						// // reconstruct cmd with space
+						// char *loopbuf;
+						// loopbuf = (char *)malloc(MAXBUFR * sizeof(char));
+						// // printf("%d\n", strlen(loopbuf));
+						// // for (int i=0; i <100; i++) loopbuf[i] = '\0';
+						// // printf("container: %s\n", loopbuf);
+						// strcpy(loopbuf, "");
+						// for (int i=2; i<cmd->argc; i++) {					
+						// 	strcat(loopbuf, cmd->argv[i]);
+						// 	if (i!=cmd->argc-1) strcat(loopbuf, " ");
+						// }
+						// printf("container: %s\n", loopbuf);
+
+						// // create another sturct to rec
+						// struct command *loop;						
+						// parse(loopbuf, loop);
+						// printf("manully parse without struct\n");	
+						// no need to parse becasue argv exists	
+
+						// isSyscall = translate(loop);
+						// printf("manully translate without struct\n");
+						// no need to translate since argv[0] must be syscall
+						for (int i=0; i<pathsize; i++) {
+							buf = (char *)malloc(MAXBUFR * sizeof(char));
+							strcpy(buf, "");
+							strcat(buf, path[i]); // /bin
+							strcat(buf, "/"); // /bin/
+							strcat(buf, args[0]); // /bin/ls
+							// if (access(buf, X_OK)!=-1) { // path[i] work
+							// 	cmd->alterpath = (char *)malloc(MAXBUFR * sizeof(char));
+							// 	cmd->alterpath = buf; // replace i cmd->argv[0]
+							// 	return 1;
+							// }
+						}
+
+						while (looptime>0) {
+							childPid = fork();
+							if (childPid<0) {
+								write(STDERR_FILENO, error_message, strlen(error_message)); 
+							} else if (childPid==0) { // child is here
+								if (execv(buf, args) < 0) {
+									write(STDERR_FILENO, error_message, strlen(error_message)); 
+									exit(1);
+								}			
+							} else {
+								wait(&childPid);}
+							looptime--;	
+						}	
 					}
-					else if (childPid==0) { // child is here
-						if (execv(loop->alterpath, loop->argv) < 0) {
-							// printf("%s: Command not found\n", loop->alterpath);
-							write(STDERR_FILENO, error_message, strlen(error_message)); 
-							exit(1);
-						}			
-					}
-					else { //  parent where the shell continues
-						// printf("Child in background [%d]\n",childPid);
-						wait(&childPid);
-					}
-					looptime--;	
-				}				
+				}			
 			}
 			// free(loopbuf);
 			// printf("the builtin is executed\n");
@@ -295,44 +372,60 @@ bool file_exists(char *filename) {
 
 int main(int argc, char *argv[]) 
 {
+	if (argc>2) { // fault
+		write(STDERR_FILENO, error_message, strlen(error_message)); 
+		exit(1);
+	}
+	
 	if (argc==2) { // batch node
 		batchpath = argv[1];
-		if (file_exists(batchpath)==false) {
+		// set path parameter, would be used in translate
+		path[0] = "/bin";
+		pathsize=1;
+		// char *buf;
+		if (file_exists(batchpath)==false) { // no batch file
 			write(STDERR_FILENO, error_message, strlen(error_message)); 
 			exit(1);
 		}
-		fp = fopen(batchpath, "r");
-		/* Get the first line of the file. */
-        line_size = getline(&line_buf, &line_buf_size, fp);
-        /* Loop through until we are done with the file. */
-        while (line_size >= 0){
-            /* trim */
-            size_t len = strlen(line_buf);
-            if (len > 0 && line_buf[len-1] == '\n') line_buf[--len] = '\0';
 
-            path[0] = "/bin";
-			pathsize=1;
-			size_t bufsize = 32;
-			size_t characters;
-			// printf("Command this: '%s'\n", line_buf);
+		fp = fopen(batchpath, "r");		
+        line_size = getline(&line_buf, &line_buf_size, fp); /* Get the first line of the file. */
+        while (line_size >= 0){ /* Loop through until we are done with the file. */ 
+            size_t len = strlen(line_buf);
+            if (len > 0 && line_buf[len-1] == '\n') line_buf[--len] = '\0'; /* trim */
+            // printf("Command this: '%s'\n", line_buf);
+			// check
+			// printf("current path is: ");
+			// for (int i=0; i<pathsize; i++) printf("%s, ", path[i]);
+			// printf("| pathsize = %d\n", pathsize);	
 
 			struct command cmd;
 			parse(line_buf, &cmd);
-			isSyscall = translate(&cmd);
-			rdrc = checkredirection(&cmd);
-			runCommand(&cmd, isSyscall, rdrc);
+			// printf("done parsing\n");
+			if (cmd.argc!=0) {
+				isSyscall = translate(&cmd);
+				rdrc = checkredirection(&cmd);
+				runCommand(&cmd, isSyscall, rdrc);
+			}	
+			// buf = (char *)malloc(MAXBUFR * sizeof(char));
+			// strcpy(buf, "");
+			// strcat(buf, path[0]); // /bin
 
-			/* Get the next line */
-            line_size = getline(&line_buf, &line_buf_size, fp);
+			// getline washes path
+            line_size = getline(&line_buf, &line_buf_size, fp); /* Get the next line */
+			// printf("path after getline is: ");
+			// for (int i=0; i<pathsize; i++) printf("%s, ", path[i]);
+			// printf("| pathsize = %d\n", pathsize);	
         }
 	}
-	else {
+	else { // interact
+		// set path parameter, would be used in translate
 		path[0] = "/bin";
 		pathsize=1;
+
 		while (1) {
 			printf("%s", prompt);
 			char *cmdline;
-			size_t bufsize = 32;
 			size_t characters;
 			cmdline = (char *)malloc(MAXBUFR * sizeof(char));
 			
@@ -346,12 +439,22 @@ int main(int argc, char *argv[])
 				write(STDERR_FILENO, error_message, strlen(error_message)); 
 				exit(1);
 			}
+			// check
+			// printf("current path is: ");
+			// for (int i=0; i<pathsize; i++) printf("%s, ", path[i]);
+			// printf("| pathsize = %d\n", pathsize);	
 
 			struct command cmd;
+			// cmd = (struct command)malloc(sizeof(struct command));
 			parse(cmdline, &cmd);
-			isSyscall = translate(&cmd);
-			rdrc = checkredirection(&cmd);
-			runCommand(&cmd, isSyscall, rdrc);
+			// printf("done parsing\n");
+			// filter if all space
+			// printf("cmd->argc: %d\n", cmd.argc);
+			if (cmd.argc!=0) {
+				isSyscall = translate(&cmd);
+				rdrc = checkredirection(&cmd);
+				runCommand(&cmd, isSyscall, rdrc);
+			}
 		}
 	}
 	return 0;

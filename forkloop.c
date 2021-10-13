@@ -1,3 +1,87 @@
+void parse(char *cmdline, struct command *cmd) {
+	printf("\nparsing %s\n", cmdline);
+	// inilize
+	cmd->argc=0;
+	printf("is this readonly\n");
+	char *tok;	
+	// check allspace
+	if (allspace(cmdline)==1) {
+		// cmd->argv[cmd->argc] = NULL; // mark the end
+	} else {
+		// sep line via space
+		while (strstr(cmdline, " ")) {
+			tok = strsep(&cmdline, " ");
+			printf("tok:%s|\n", tok);
+			if(strcmp(tok, "")!=0 && strcmp(tok, "\t")!=0) {
+				cmd->argv[cmd->argc] = tok;
+				cmd->argc++;
+			} else {
+				// printf("isspace\n");
+			}
+		}
+		// add last one
+		tok = cmdline;
+		cmdline = "";
+		if(strcmp(tok, "")!=0 && strcmp(tok, "\t")!=0) {
+			cmd->argv[cmd->argc] = tok;
+			cmd->argc++;
+		} else {
+			// printf("isspace\n");
+		}
+		cmd->argv[cmd->argc] = NULL; // mark the end
+		// check info
+		if (cmd->argc!=0) {
+			printf("cmd->argc: %d | ", cmd->argc);
+			printf("cmd->argv: ");
+			for (int i=0; i<cmd->argc; i++) printf("%s, ", cmd->argv[i]);
+			printf("\n");
+		} else {
+			// printf("cmd->argc: %d\n", cmd->argc);
+		}
+	}
+}
+
+int translate(struct command *cmd) { 
+	// check if cmd->argv[0]) is a system call
+	// if not then print error message
+	// if yes concatenate it with the path
+
+	// printf("syscall check for %s\n", cmd->argv[0]);
+	for (int i=0; i<pathsize; i++) {
+		char *buf;
+		buf = (char *)malloc(MAXBUFR * sizeof(char));
+		strcpy(buf, "");
+		strcat(buf, path[i]); // /bin
+		strcat(buf, "/"); // /bin/
+		strcat(buf, cmd->argv[0]); // /bin/ls
+		if (access(buf, X_OK)!=-1) { // path[i] work
+			cmd->alterpath = (char *)malloc(PATHBUFR * sizeof(char));
+			cmd->alterpath = buf; // replace i cmd->argv[0]
+			return 1;
+		}
+	}
+	// printf("not a system call\n");
+	return 0;
+}
+
+char *args[3];
+if(strcmp(cmd->argv[rdrc], ">")==0) { // rdrc = index of ">" in cmd->argv
+    close(STDOUT_FILENO);
+    open(cmd->argv[rdrc+1], O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU); // rdrc+1 = index of file
+    args[0] = cmd->alterpath; 
+    if (rdrc==1) args[1] = NULL;
+    else if (rdrc==2) {
+        args[1] = cmd->argv[1];
+        args[2] = NULL;
+
+
+
+
+
+
+
+
+
 while (looptime>0) {
     childPid = fork();
     if (childPid<0) {
@@ -13,15 +97,6 @@ while (looptime>0) {
     }
     looptime--;			
 }
-
-
-
-
-
-
-
-
-
 
 while (looptime>0) {
     childPid = fork();
