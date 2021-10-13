@@ -73,14 +73,7 @@ if(strcmp(cmd->argv[rdrc], ">")==0) { // rdrc = index of ">" in cmd->argv
     else if (rdrc==2) {
         args[1] = cmd->argv[1];
         args[2] = NULL;
-
-
-
-
-
-
-
-
+	}
 
 while (looptime>0) {
     childPid = fork();
@@ -111,10 +104,7 @@ while (looptime>0) {
         printf("Child in background [%d]\n",childPid);
         wait(&childPid);
     }	
-    runCommand(loop, isSyscall, rdrc);	
-
     // do the runCommand?	
-
     if (isSyscall==1) {	
         childPid = fork();
         // printf("\nchildPid: %d\n", childPid);
@@ -156,43 +146,36 @@ while (looptime>0) {
     printf("looptime remains: %d\n", looptime);				
 }
 
+						// check
+						// printf("argc: %d\n", argc);
+						// for (int i=0; i<argc; i++) {					
+						// 	// strcat(loopbuf, cmd->argv[i]);
+						// 	printf("args[%d]: %s\n", i, args[i]);
+						// 	// if (i!=cmd->argc-1) strcat(loopbuf, " ");
+						// }
+						args[argc] = NULL;
+						// // reconstruct cmd with space
+						// char *loopbuf;
+						// loopbuf = (char *)malloc(MAXBUFR * sizeof(char));
+						// // printf("%d\n", strlen(loopbuf));
+						// // for (int i=0; i <100; i++) loopbuf[i] = '\0';
+						// // printf("container: %s\n", loopbuf);
+						// strcpy(loopbuf, "");
+						// for (int i=2; i<cmd->argc; i++) {					
+						// 	strcat(loopbuf, cmd->argv[i]);
+						// 	if (i!=cmd->argc-1) strcat(loopbuf, " ");
+						// }
+						// printf("container: %s\n", loopbuf);
 
+						// // create another sturct to rec
+						// struct command *loop;						
+						// parse(loopbuf, loop);
+						// printf("manully parse without struct\n");	
+						// no need to parse becasue argv exists	
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+						// isSyscall = translate(loop);
+						// printf("manully translate without struct\n");
+						// no need to translate since argv[0] must be syscall
 
 				// parse and save
 				// loopargc = cmd->argc-2; // waive 0 1
@@ -201,11 +184,8 @@ while (looptime>0) {
 				// for (int i=0; i<loopargc; i++) {
 				// 	loopargs[i] = cmd->argv[i+2]; // echo, hello, $loop
 				// }
-				// loopargs[loopargc] = NULL;				
+				// loopargs[loopargc] = NULL;	
 
-
-
-				
 				// loop->argc = cmd->argc-2; // waive 0 1
 				// for(int i = 0; i < loop->argc; i++) {
 				// 	loop->argv[i] = cmd->argv[i+2];
@@ -216,12 +196,6 @@ while (looptime>0) {
 				// for (int i=0; i<loop->argc; i++) {
 				// 	printf("argv[%d]: %s\n", i,loop->argv[i]);
 				// }
-
-
-
-
-
-
                 // // create a struct
 				// struct command *loop;	
 				// loop->argc = loopargc;	
