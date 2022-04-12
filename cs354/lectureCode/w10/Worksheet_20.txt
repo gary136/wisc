@@ -1,0 +1,90 @@
+Problem 1.  Write assembly code for the increment function below.  This code may be found in increment1.c
+
+int increment(int x){
+    return x+1;
+}
+
+int main(){
+    int f = 10;
+    f = increment(f);
+    return 0;
+}
+
+
+
+Problem 2.  Write assembly code for the increment function below. This code may be found in increment2.c
+
+void increment(int *x){
+    *x = *x + 1;
+}
+
+int main(){
+    int f = 10;
+    increment(&f);
+    return 0;
+}
+
+
+Problem 3.  Write C code that is could have generated the assembly code below. This code may be found in strange.s
+
+	.file	"strange.c"
+	.text
+	.globl	strange
+	.type	strange, @function
+strange:
+	endbr32
+	pushl	%ebp
+	movl	%esp, %ebp
+	subl	$16, %esp
+	movl	8(%ebp), %eax
+	movl	(%eax), %eax
+	movl	12(%ebp), %edx
+	imull	%edx, %eax
+	movl	%eax, -4(%ebp)
+	movl	8(%ebp), %eax
+	movl	(%eax), %edx
+	movl	12(%ebp), %eax
+	addl	%eax, %edx
+	movl	8(%ebp), %eax
+	movl	%edx, (%eax)
+	movl	-4(%ebp), %eax
+	leave
+	ret
+	.size	strange, .-strange
+	.globl	main
+	.type	main, @function
+main:
+	endbr32
+	pushl	%ebp
+	movl	%esp, %ebp
+	subl	$16, %esp
+	movl	$3, -12(%ebp)
+	movl	$4, -4(%ebp)
+	pushl	-4(%ebp)
+	leal	-12(%ebp), %eax
+	pushl	%eax
+	call	strange
+	addl	$8, %esp
+	movl	%eax, -8(%ebp)
+	movl	$0, %eax
+	leave
+	ret
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 9.3.0-10ubuntu2) 9.3.0"
+	.section	.note.GNU-stack,"",@progbits
+	.section	.note.gnu.property,"a"
+	.align 4
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 "GNU"
+1:
+	.align 4
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.align 4
+4:

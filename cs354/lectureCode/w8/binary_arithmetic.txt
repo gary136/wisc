@@ -1,0 +1,77 @@
+// consider a 3 bit machine that uses 2's complement representation for
+negative integers
+
+// unsigned addition: 3 + 1
+      11
+ 3    011
++1    001
+      100  -> 4
+
+// unsigned addition: 5 + 3
+     111               
+ 5    101                      
++3    011 
+ 8   1000  -> 000                 
+
+000: 0
+001: 1
+010: 2
+011: 3
+100: 4
+101: 5
+110: 6
+111: 7
+
+                      
+// signed subtraction: 2 - 1
+      02                      
+ 2   010                      
+-1   001                   
+     001
+
+
+// signed addition: 2 + (-1)
+    11
+ 2   010                      
+-1   111                       
+    1001  -> 001
+       
+2's complement representation               
+-1   001
+ones 110
++1   001 
+     111 
+
+
+000:  0
+001:  1
+010:  2
+011:  3
+100: -4     
+101: -3    
+110: -2   
+111: -1
+
+// signed subtraction: 2 - 3
+     12
+      02 
+ 2   010                     
+-3   011                    
+     111   -> -1            
+
+// signed subtraction: -2 - 3
+     02
+      02
+-2   110
+-3   011
+     011  -> 3
+
+
+
+
+
+
+
+
+
+

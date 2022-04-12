@@ -1,0 +1,19 @@
+Board Size (Rows, Columns)
+5 8
+Number Of Ships
+6
+0 1 2 V
+-1 1 2 H
+1 -1 2 H
+3 3 15 H
+4 4 15 V
+0 1 2 H
+Number of Attacks
+6
+0 1
+3 4
+1 1
+99 99
+-1 1
+-3 4
+

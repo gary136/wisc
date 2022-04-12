@@ -1,0 +1,11 @@
+gcc -o x x.c -m32 -fno-asynchronous-unwind-tables -fno-pie -fno-stack-protector
+gcc -o unitTest unitTest.c -m32 -fno-asynchronous-unwind-tables -fno-pie -fno-stack-protector
+gcc -o asm asm.c -m32 -fno-asynchronous-unwind-tables -fno-pie -fno-stack-protector
+gcc -o Covert_Ops Covert_Ops.c -m32 -fno-asynchronous-unwind-tables -fno-pie -fno-stack-protector
+
+./asm < Codes.txt
+
+gcc -S x.c -m32 -fno-asynchronous-unwind-tables -fno-pie -fno-stack-protector
+gcc -S unitTest.c -m32 -fno-asynchronous-unwind-tables -fno-pie -fno-stack-protector
+
+./Covert_Ops < Codes.txt

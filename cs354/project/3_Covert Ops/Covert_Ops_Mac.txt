@@ -1,0 +1,128 @@
+Is_Number_Correct:
+    120d:	f3 0f 1e fb 	endbr32
+    1211:	55 	pushl	%ebp
+    1212:	89 e5 	movl	%esp, %ebp
+    1214:	83 ec 08 	subl	$8, %esp
+    1217:	8b 45 08 	movl	8(%ebp), %eax
+    121a:	3b 45 0c 	cmpl	12(%ebp), %eax
+    121d:	75 1a 	jne	26 <Is_Number_Correct+0x2c>
+    121f:	83 ec 08 	subl	$8, %esp
+    1222:	ff 75 10 	pushl	16(%ebp)
+    1225:	68 08 20 00 00 	pushl	$8200
+    122a:	e8 fc ff ff ff 	calll	-4 <Is_Number_Correct+0x1e>
+    122f:	83 c4 10 	addl	$16, %esp
+    1232:	b8 01 00 00 00 	movl	$1, %eax
+    1237:	eb 18 	jmp	24 <Is_Number_Correct+0x44>
+    1239:	83 ec 08 	subl	$8, %esp
+    123c:	ff 75 10 	pushl	16(%ebp)
+    123f:	68 27 20 00 00 	pushl	$8231
+    1244:	e8 fc ff ff ff 	calll	-4 <Is_Number_Correct+0x38>
+    1249:	83 c4 10 	addl	$16, %esp
+    124c:	b8 00 00 00 00 	movl	$0, %eax
+    1251:	c9 	leave
+    1252:	c3 	retl
+
+f0:
+    1253:	f3 0f 1e fb 	endbr32
+    1257:	55 	pushl	%ebp
+    1258:	89 e5 	movl	%esp, %ebp
+    125a:	b8 0c 4a 55 00 	movl	$5589516, %eax
+    125f:	5d 	popl	%ebp
+    1260:	c3 	retl
+
+f1:
+    1261:	f3 0f 1e fb 	endbr32
+    1265:	55 	pushl	%ebp
+    1266:	89 e5 	movl	%esp, %ebp
+    1268:	83 ec 20 	subl	$32, %esp
+    126b:	c7 45 fc c3 61 00 00 	movl	$25027, -4(%ebp)
+    1272:	c7 45 f8 82 c8 00 00 	movl	$51330, -8(%ebp)
+    1279:	c7 45 f4 dc 07 01 00 	movl	$67548, -12(%ebp)
+    1280:	c7 45 f0 c4 76 00 00 	movl	$30404, -16(%ebp)
+    1287:	c7 45 ec 31 00 00 00 	movl	$49, -20(%ebp)
+    128e:	c7 45 e8 11 00 00 00 	movl	$17, -24(%ebp)
+    1295:	8b 55 f8 	movl	-8(%ebp), %edx
+    1298:	8b 45 f4 	movl	-12(%ebp), %eax
+    129b:	01 d0 	addl	%edx, %eax
+    129d:	39 45 fc 	cmpl	%eax, -4(%ebp)
+    12a0:	7e 09 	jle	9 <f1+0x4a>
+    12a2:	c1 7d fc 04 	sarl	$4, -4(%ebp)
+    12a6:	8b 45 fc 	movl	-4(%ebp), %eax
+    12a9:	eb 28 	jmp	40 <f1+0x72>
+    12ab:	8b 45 fc 	movl	-4(%ebp), %eax
+    12ae:	0f af 45 f8 	imull	-8(%ebp), %eax
+    12b2:	39 45 f0 	cmpl	%eax, -16(%ebp)
+    12b5:	7d 0f 	jge	15 <f1+0x65>
+    12b7:	8b 45 f4 	movl	-12(%ebp), %eax
+    12ba:	99 	cltd
+    12bb:	f7 7d ec 	idivl	-20(%ebp)
+    12be:	89 55 f4 	movl	%edx, -12(%ebp)
+    12c1:	8b 45 f4 	movl	-12(%ebp), %eax
+    12c4:	eb 0d 	jmp	13 <f1+0x72>
+    12c6:	8b 45 f0 	movl	-16(%ebp), %eax
+    12c9:	99 	cltd
+    12ca:	f7 7d e8 	idivl	-24(%ebp)
+    12cd:	89 45 f0 	movl	%eax, -16(%ebp)
+    12d0:	8b 45 f0 	movl	-16(%ebp), %eax
+    12d3:	c9 	leave
+    12d4:	c3 	retl
+
+f2:
+    12d5:	f3 0f 1e fb 	endbr32
+    12d9:	55 	pushl	%ebp
+    12da:	89 e5 	movl	%esp, %ebp
+    12dc:	83 ec 10 	subl	$16, %esp
+    12df:	c7 45 fc 00 00 00 00 	movl	$0, -4(%ebp)
+    12e6:	c7 45 f8 00 00 00 00 	movl	$0, -8(%ebp)
+    12ed:	eb 14 	jmp	20 <f2+0x2e>
+    12ef:	8b 45 fc 	movl	-4(%ebp), %eax
+    12f2:	0f af c0 	imull	%eax, %eax
+    12f5:	89 c2 	movl	%eax, %edx
+    12f7:	8b 45 08 	movl	8(%ebp), %eax
+    12fa:	01 d0 	addl	%edx, %eax
+    12fc:	01 45 f8 	addl	%eax, -8(%ebp)
+    12ff:	83 45 fc 01 	addl	$1, -4(%ebp)
+    1303:	83 7d fc 1b 	cmpl	$27, -4(%ebp)
+    1307:	7e e6 	jle	-26 <f2+0x1a>
+    1309:	8b 45 f8 	movl	-8(%ebp), %eax
+    130c:	c9 	leave
+    130d:	c3 	retl
+
+f3_helper:
+    130e:	f3 0f 1e fb 	endbr32
+    1312:	55 	pushl	%ebp
+    1313:	89 e5 	movl	%esp, %ebp
+    1315:	83 ec 10 	subl	$16, %esp
+    1318:	c7 45 fc 03 00 00 00 	movl	$3, -4(%ebp)
+    131f:	8b 45 08 	movl	8(%ebp), %eax
+    1322:	8b 10 	movl	(%eax), %edx
+    1324:	8b 45 fc 	movl	-4(%ebp), %eax
+    1327:	01 c2 	addl	%eax, %edx
+    1329:	8b 45 08 	movl	8(%ebp), %eax
+    132c:	89 10 	movl	%edx, (%eax)
+    132e:	90 	nop
+    132f:	c9 	leave
+    1330:	c3 	retl
+
+f3:
+    1331:	f3 0f 1e fb 	endbr32
+    1335:	55 	pushl	%ebp
+    1336:	89 e5 	movl	%esp, %ebp
+    1338:	8d 45 08 	leal	8(%ebp), %eax
+    133b:	50 	pushl	%eax
+    133c:	e8 cd ff ff ff 	calll	-51 <f3_helper>
+    1341:	83 c4 04 	addl	$4, %esp
+    1344:	8d 45 08 	leal	8(%ebp), %eax
+    1347:	50 	pushl	%eax
+    1348:	e8 c1 ff ff ff 	calll	-63 <f3_helper>
+    134d:	83 c4 04 	addl	$4, %esp
+    1350:	8b 45 0c 	movl	12(%ebp), %eax
+    1353:	8b 00 	movl	(%eax), %eax
+    1355:	8b 55 08 	movl	8(%ebp), %edx
+    1358:	c1 e2 03 	shll	$3, %edx
+    135b:	01 c2 	addl	%eax, %edx
+    135d:	8b 45 0c 	movl	12(%ebp), %eax
+    1360:	89 10 	movl	%edx, (%eax)
+    1362:	90 	nop
+    1363:	c9 	leave
+    1364:	c3 	retl

@@ -1,0 +1,82 @@
+int increment(int x){
+    return x+1;
+}
+
+int main(){
+    int f = 10;
+    f = increment(f);
+    return 0;
+}
+
+
+
+
+/*
+assembly
+
+setup
+prologue
+function body
+epilogue
+cleanup
+
+increment:
+    #prologue
+    pushl %ebp
+    movl %esp, %ebp
+    #body    
+    movl 8(%ebp),%eax
+    addl $1, %eax
+    #epilogue  
+    popl %ebp
+    ret
+
+main:
+    pushl %ebp
+    movl %esp, %ebp
+    subl $4, %esp
+    movl $10, -4(%ebp)
+    #setup
+    pushl -4(%ebp)
+    call increment
+    #cleanup
+    movl %eax, -4(%ebp)
+    addl $4, %esp
+
+    movl $0, $eax
+    ret 
+*/    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

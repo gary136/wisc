@@ -1,0 +1,269 @@
+0000120d <Is_Number_Correct>:
+    120d:	f3 0f 1e fb          	endbr32 
+    1211:	55                   	push   %ebp
+    1212:	89 e5                	mov    %esp,%ebp
+    1214:	83 ec 08             	sub    $0x8,%esp
+    1217:	8b 45 08             	mov    0x8(%ebp),%eax
+    121a:	3b 45 0c             	cmp    0xc(%ebp),%eax
+    121d:	75 1a                	jne    1239 <Is_Number_Correct+0x2c>
+    121f:	83 ec 08             	sub    $0x8,%esp
+    1222:	ff 75 10             	pushl  0x10(%ebp)
+    1225:	68 08 20 00 00       	push   $0x2008
+    122a:	e8 fc ff ff ff       	call   122b <Is_Number_Correct+0x1e>
+    122f:	83 c4 10             	add    $0x10,%esp
+    1232:	b8 01 00 00 00       	mov    $0x1,%eax
+    1237:	eb 18                	jmp    1251 <Is_Number_Correct+0x44>
+
+    1239:	83 ec 08             	sub    $0x8,%esp
+    123c:	ff 75 10             	pushl  0x10(%ebp)
+    123f:	68 27 20 00 00       	push   $0x2027
+    1244:	e8 fc ff ff ff       	call   1245 <Is_Number_Correct+0x38>
+    1249:	83 c4 10             	add    $0x10,%esp
+    124c:	b8 00 00 00 00       	mov    $0x0,%eax
+    
+    1251:	c9                   	leave  
+    1252:	c3                   	ret    
+
+00001253 <f0>: 
+    1253:	f3 0f 1e fb          	endbr32 
+    1257:	55                   	push   %ebp
+    1258:	89 e5                	mov    %esp,%ebp
+    125a:	b8 0c 4a 55 00       	mov    $0x554a0c,%eax
+    125f:	5d                   	pop    %ebp
+    1260:	c3                   	ret    
+
+00001261 <f1>:
+    1261:	f3 0f 1e fb          	endbr32 
+    1265:	55                   	push   %ebp
+    1266:	89 e5                	mov    %esp,%ebp
+    1268:	83 ec 20             	sub    $0x20,%esp
+    126b:	c7 45 fc c3 61 00 00 	movl   $0x61c3,-0x4(%ebp)
+    1272:	c7 45 f8 82 c8 00 00 	movl   $0xc882,-0x8(%ebp)
+    1279:	c7 45 f4 dc 07 01 00 	movl   $0x107dc,-0xc(%ebp)
+    1280:	c7 45 f0 c4 76 00 00 	movl   $0x76c4,-0x10(%ebp)
+    1287:	c7 45 ec 31 00 00 00 	movl   $0x31,-0x14(%ebp)
+    128e:	c7 45 e8 11 00 00 00 	movl   $0x11,-0x18(%ebp)
+    1295:	8b 55 f8             	mov    -0x8(%ebp),%edx
+    1298:	8b 45 f4             	mov    -0xc(%ebp),%eax
+    129b:	01 d0                	add    %edx,%eax
+    129d:	39 45 fc             	cmp    %eax,-0x4(%ebp)
+    12a0:	7e 09                	jle    12ab <f1+0x4a>
+
+    12a2:	c1 7d fc 04          	sarl   $0x4,-0x4(%ebp)
+    12a6:	8b 45 fc             	mov    -0x4(%ebp),%eax
+    12a9:	eb 28                	jmp    12d3 <f1+0x72>
+
+    12ab:	8b 45 fc             	mov    -0x4(%ebp),%eax
+    12ae:	0f af 45 f8          	imul   -0x8(%ebp),%eax
+    12b2:	39 45 f0             	cmp    %eax,-0x10(%ebp)
+    12b5:	7d 0f                	jge    12c6 <f1+0x65>
+    
+    12b7:	8b 45 f4             	mov    -0xc(%ebp),%eax
+    12ba:	99                   	cltd   
+    12bb:	f7 7d ec             	idivl  -0x14(%ebp)
+    12be:	89 55 f4             	mov    %edx,-0xc(%ebp)
+    12c1:	8b 45 f4             	mov    -0xc(%ebp),%eax
+    12c4:	eb 0d                	jmp    12d3 <f1+0x72>
+
+    12c6:	8b 45 f0             	mov    -0x10(%ebp),%eax
+    12c9:	99                   	cltd   
+    12ca:	f7 7d e8             	idivl  -0x18(%ebp)
+    12cd:	89 45 f0             	mov    %eax,-0x10(%ebp)
+    12d0:	8b 45 f0             	mov    -0x10(%ebp),%eax
+    
+    12d3:	c9                   	leave  
+    12d4:	c3                   	ret    
+
+000012d5 <f2>:
+    12d5:	f3 0f 1e fb          	endbr32 
+    12d9:	55                   	push   %ebp
+    12da:	89 e5                	mov    %esp,%ebp
+    12dc:	83 ec 10             	sub    $0x10,%esp
+    12df:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+    12e6:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+    12ed:	eb 14                	jmp    1303 <f2+0x2e>
+
+    12ef:	8b 45 fc             	mov    -0x4(%ebp),%eax
+    12f2:	0f af c0             	imul   %eax,%eax
+    12f5:	89 c2                	mov    %eax,%edx
+    12f7:	8b 45 08             	mov    0x8(%ebp),%eax
+    12fa:	01 d0                	add    %edx,%eax
+    12fc:	01 45 f8             	add    %eax,-0x8(%ebp)
+    12ff:	83 45 fc 01          	addl   $0x1,-0x4(%ebp)
+
+    1303:	83 7d fc 1b          	cmpl   $0x1b,-0x4(%ebp)
+    1307:	7e e6                	jle    12ef <f2+0x1a>
+    
+    1309:	8b 45 f8             	mov    -0x8(%ebp),%eax
+    130c:	c9                   	leave  
+    130d:	c3                   	ret    
+
+0000130e <f3_helper>:
+    130e:	f3 0f 1e fb          	endbr32 
+    1312:	55                   	push   %ebp
+    1313:	89 e5                	mov    %esp,%ebp
+    1315:	83 ec 10             	sub    $0x10,%esp
+    1318:	c7 45 fc 03 00 00 00 	movl   $0x3,-0x4(%ebp)
+    131f:	8b 45 08             	mov    0x8(%ebp),%eax
+    1322:	8b 10                	mov    (%eax),%edx
+    1324:	8b 45 fc             	mov    -0x4(%ebp),%eax
+    1327:	01 c2                	add    %eax,%edx
+    1329:	8b 45 08             	mov    0x8(%ebp),%eax
+    132c:	89 10                	mov    %edx,(%eax)
+    132e:	90                   	nop
+    132f:	c9                   	leave  
+    1330:	c3                   	ret    
+
+00001331 <f3>:
+    1331:	f3 0f 1e fb          	endbr32 
+    1335:	55                   	push   %ebp
+    1336:	89 e5                	mov    %esp,%ebp
+
+    1338:	8d 45 08             	lea    0x8(%ebp),%eax
+    133b:	50                   	push   %eax
+    133c:	e8 cd ff ff ff       	call   130e <f3_helper>
+    1341:	83 c4 04             	add    $0x4,%esp
+
+    1344:	8d 45 08             	lea    0x8(%ebp),%eax
+    1347:	50                   	push   %eax
+    1348:	e8 c1 ff ff ff       	call   130e <f3_helper>
+    134d:	83 c4 04             	add    $0x4,%esp
+    
+    1350:	8b 45 0c             	mov    0xc(%ebp),%eax
+    1353:	8b 00                	mov    (%eax),%eax
+    1355:	8b 55 08             	mov    0x8(%ebp),%edx
+    1358:	c1 e2 03             	shl    $0x3,%edx
+    135b:	01 c2                	add    %eax,%edx
+    135d:	8b 45 0c             	mov    0xc(%ebp),%eax
+    1360:	89 10                	mov    %edx,(%eax)
+    1362:	90                   	nop
+    1363:	c9                   	leave  
+    1364:	c3                   	ret
+
+main:
+    1365:	f3 0f 1e fb 	endbr32
+    1369:	8d 4c 24 04 	leal	4(%esp), %ecx
+    136d:	83 e4 f0 	andl	$-16, %esp
+    1370:	ff 71 fc 	pushl	-4(%ecx)
+    1373:	55 	pushl	%ebp
+    1374:	89 e5 	movl	%esp, %ebp
+    1376:	53 	pushl	%ebx
+    1377:	51 	pushl	%ecx
+    1378:	83 ec 30 	subl	$48, %esp
+    137b:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
+    1382:	83 ec 0c 	subl	$12, %esp
+    1385:	68 3d 20 00 00 	pushl	$8253
+    138a:	e8 fc ff ff ff 	calll	-4 <main+0x26>
+    138f:	83 c4 10 	addl	$16, %esp
+    1392:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
+    1399:	eb 20 	jmp	32 <main+0x56>
+    139b:	8d 45 e0 	leal	-32(%ebp), %eax
+    139e:	8b 55 f4 	movl	-12(%ebp), %edx
+    13a1:	c1 e2 02 	shll	$2, %edx
+    13a4:	01 d0 	addl	%edx, %eax
+    13a6:	83 ec 08 	subl	$8, %esp
+    13a9:	50 	pushl	%eax
+    13aa:	68 52 20 00 00 	pushl	$8274
+    13af:	e8 fc ff ff ff 	calll	-4 <main+0x4b>
+    13b4:	83 c4 10 	addl	$16, %esp
+    13b7:	83 45 f4 01 	addl	$1, -12(%ebp)
+    13bb:	83 7d f4 03 	cmpl	$3, -12(%ebp)
+    13bf:	7e da 	jle	-38 <main+0x36>
+    13c1:	8b 5d ec 	movl	-20(%ebp), %ebx
+    13c4:	8b 4d e8 	movl	-24(%ebp), %ecx
+    13c7:	8b 55 e4 	movl	-28(%ebp), %edx
+    13ca:	8b 45 e0 	movl	-32(%ebp), %eax
+    13cd:	83 ec 0c 	subl	$12, %esp
+    13d0:	53 	pushl	%ebx
+    13d1:	51 	pushl	%ecx
+    13d2:	52 	pushl	%edx
+    13d3:	50 	pushl	%eax
+    13d4:	68 58 20 00 00 	pushl	$8280
+    13d9:	e8 fc ff ff ff 	calll	-4 <main+0x75>
+    13de:	83 c4 20 	addl	$32, %esp
+    13e1:	e8 6d fe ff ff 	calll	-403 <f0>
+    13e6:	89 45 d0 	movl	%eax, -48(%ebp)
+    13e9:	e8 73 fe ff ff 	calll	-397 <f1>
+    13ee:	89 45 d4 	movl	%eax, -44(%ebp)
+    13f1:	83 ec 0c 	subl	$12, %esp
+    13f4:	ff 75 f4 	pushl	-12(%ebp)
+    13f7:	e8 d9 fe ff ff 	calll	-295 <f2>
+    13fc:	83 c4 10 	addl	$16, %esp
+    13ff:	89 45 d8 	movl	%eax, -40(%ebp)
+    1402:	c7 45 dc ce 0f 00 00 	movl	$4046, -36(%ebp)
+    1409:	8b 45 dc 	movl	-36(%ebp), %eax
+    140c:	83 ec 08 	subl	$8, %esp
+    140f:	8d 55 d0 	leal	-48(%ebp), %edx
+    1412:	83 c2 0c 	addl	$12, %edx
+    1415:	52 	pushl	%edx
+    1416:	50 	pushl	%eax
+    1417:	e8 15 ff ff ff 	calll	-235 <f3>
+    141c:	83 c4 10 	addl	$16, %esp
+    141f:	8b 55 d0 	movl	-48(%ebp), %edx
+    1422:	8b 45 e0 	movl	-32(%ebp), %eax
+    1425:	83 ec 04 	subl	$4, %esp
+    1428:	6a 00 	pushl	$0
+    142a:	52 	pushl	%edx
+    142b:	50 	pushl	%eax
+    142c:	e8 dc fd ff ff 	calll	-548 <Is_Number_Correct>
+    1431:	83 c4 10 	addl	$16, %esp
+    1434:	01 45 f0 	addl	%eax, -16(%ebp)
+    1437:	8b 55 d4 	movl	-44(%ebp), %edx
+    143a:	8b 45 e4 	movl	-28(%ebp), %eax
+    143d:	83 ec 04 	subl	$4, %esp
+    1440:	6a 01 	pushl	$1
+    1442:	52 	pushl	%edx
+    1443:	50 	pushl	%eax
+    1444:	e8 c4 fd ff ff 	calll	-572 <Is_Number_Correct>
+    1449:	83 c4 10 	addl	$16, %esp
+    144c:	01 45 f0 	addl	%eax, -16(%ebp)
+    144f:	8b 55 d8 	movl	-40(%ebp), %edx
+    1452:	8b 45 e8 	movl	-24(%ebp), %eax
+    1455:	83 ec 04 	subl	$4, %esp
+    1458:	6a 02 	pushl	$2
+    145a:	52 	pushl	%edx
+    145b:	50 	pushl	%eax
+    145c:	e8 ac fd ff ff 	calll	-596 <Is_Number_Correct>
+    1461:	83 c4 10 	addl	$16, %esp
+    1464:	01 45 f0 	addl	%eax, -16(%ebp)
+    1467:	8b 55 dc 	movl	-36(%ebp), %edx
+    146a:	8b 45 ec 	movl	-20(%ebp), %eax
+    146d:	83 ec 04 	subl	$4, %esp
+    1470:	6a 03 	pushl	$3
+    1472:	52 	pushl	%edx
+    1473:	50 	pushl	%eax
+    1474:	e8 94 fd ff ff 	calll	-620 <Is_Number_Correct>
+    1479:	83 c4 10 	addl	$16, %esp
+    147c:	01 45 f0 	addl	%eax, -16(%ebp)
+    147f:	83 7d f0 00 	cmpl	$0, -16(%ebp)
+    1483:	75 10 	jne	16 <main+0x130>
+    1485:	83 ec 0c 	subl	$12, %esp
+    1488:	68 7c 20 00 00 	pushl	$8316
+    148d:	e8 fc ff ff ff 	calll	-4 <main+0x129>
+    1492:	83 c4 10 	addl	$16, %esp
+    1495:	83 7d f0 00 	cmpl	$0, -16(%ebp)
+    1499:	7e 19 	jle	25 <main+0x14f>
+    149b:	83 7d f0 03 	cmpl	$3, -16(%ebp)
+    149f:	7f 13 	jg	19 <main+0x14f>
+    14a1:	83 ec 08 	subl	$8, %esp
+    14a4:	ff 75 f0 	pushl	-16(%ebp)
+    14a7:	68 b4 20 00 00 	pushl	$8372
+    14ac:	e8 fc ff ff ff 	calll	-4 <main+0x148>
+    14b1:	83 c4 10 	addl	$16, %esp
+    14b4:	83 7d f0 04 	cmpl	$4, -16(%ebp)
+    14b8:	75 10 	jne	16 <main+0x165>
+    14ba:	83 ec 0c 	subl	$12, %esp
+    14bd:	68 e4 20 00 00 	pushl	$8420
+    14c2:	e8 fc ff ff ff 	calll	-4 <main+0x15e>
+    14c7:	83 c4 10 	addl	$16, %esp
+    14ca:	b8 00 00 00 00 	movl	$0, %eax
+    14cf:	8d 65 f8 	leal	-8(%ebp), %esp
+    14d2:	59 	popl	%ecx
+    14d3:	5b 	popl	%ebx
+    14d4:	5d 	popl	%ebp
+    14d5:	8d 61 fc 	leal	-4(%ecx), %esp
+    14d8:	c3 	retl
+    14d9:	66 90 	nop
+    14db:	66 90 	nop
+    14dd:	66 90 	nop
+    14df:	90 	nop

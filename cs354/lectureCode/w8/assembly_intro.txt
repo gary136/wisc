@@ -1,0 +1,159 @@
+// REGISTERS
+%a             [........]   // 8080
+%ax  [........][........]   // [%ah][%al]
+%eax [................][........][........] 
+
+// data transfer
+mov source, destination
+store 27 in %eax
+
+mov $27, %eax
+mov $0x100, %ebx
+
+variants
+movl $30, %ebx // l stands for long word - 4 bytes
+movw $30, %bx  // w stand word - 2 bytes 
+movb $30, %al  // move 1 byte
+
+movl $0xFF // sets upper 24 bits to 0 and bottom 8 to 1
+movb $0xFF, %al // sets lower 8 bits to 1 and doesn't change upper 24 bits
+
+
+
+// Arithmetic Instructions
+addl source, destination   d <- d + s
+subl source, destination   d <- d - s
+imull source, destination  d <- d * s
+
+division
+7 / 2
+7 is the dividend (numerator)
+2 is the divisor  (denominator)
+
+[%edx : %eax]  8 bytes total for the dividend
+divisor goes somewhere else
+
+quotient -> %eax
+remainder -> %edx
+idivl %ecx
+
+
+// problem 1
+move 1 into %eax
+add 10 to it and put the result into %eax
+  movl $1, %eax
+  movl $10, %ebx
+  addl %ebx, %eax
+
+// problem 2
+Evaluate 3 + 6 * 2 using only %eax in 3 Instructions
+  movl $6, %eax
+  imull $2, %eax
+  addl $3, %eax
+
+// problem 3
+movl $0, %edx
+movl $7, %eax   [ %edx 0 ] : [ %eax 7 ]
+movl $3, %ebx
+idivl %ebx       7 / 3  [ %edx - remainder 1 ] [ %eax quotient 2 ]
+movl %eax, %ecx 
+movl $0, %edx 
+movl $9, $eax   [ %edx 0 ] : [ %eax 9 ]
+movl $2, %ebx 
+idivl %ebx  9 / 2  [ %edx - remainder 1 ] [ %eax quotient 4 ]
+movl %edx, %eax 
+addl %ecx, %eax 
+
+eax : 3
+ebx : 2
+ecx : 2
+
+7/3 + 9%2
+
+
+
+// accessing memory
+0x1000 : 74
+0x1004 : 23
+0x1008 : 42
+0x100c : 10
+
+1. ABSOLUTE ADDRESSING 
+movl 0x1000, %eax
+movl 1000, %eax     // automatically converts to hex address and reads memory
+location 0x3E8
+
+2. INDIRECT ADDRESSING
+// register to hold the memory ADDRESSING
+movl $0x1000, %eax
+movl (%eax), %ebx
+
+3. BASE + DISPLACEMENT INCREMENT ADDRESSING
+movl 8(%eax), %ebx
+0x1000 + 0x8 = 0x1008  stores 42 in %ebx
+
+
+4. INDEXED ADDRESSING
+
+struct point {
+    int x, y;
+    char name[42];
+};
+
+// access name[2]
+assume base address of the struct is stored in %eax
+and index (2) is stored in %ebx
+movl 8(%eax,%ebx), %ecx
+
+immediate + base address + index 
+
+
+5. SCALED INDEX ADDRESSING
+// most general
+movl immediate(base, index, scale), destination
+movl 8(%eax, %ebx, 1)
+movl 8(,%ebx, 1)
+
+
+
+Problem 4.
+
+0x100   0xFF
+0x104   0xAB
+0x108   0x13 
+0x10C   0x11 
+
+%eax    0x100
+%ecx    0x1 
+%edx    0x3
+
+
+%eax                0x100 
+0x104               0xAB 
+$0x108              0x108
+(%eax)              0xFF
+4(%eax) addr: 4 + 0x100 = 0x104   -> 0xAB
+9(%eax, %edx) 9 + 0x100 + 0x3 = 0x10C   -> 0x11 
+260(%ecx, %edx) 260 + 0x1 + 0x3 = 0x108  -> 0x13
+0xFC(,%ecx, 4)  0xFC + 0x1 * 4 - 0x100 -> 0xFF
+(%eax, %edx, 4) 0x100 + 0x3*4 = 0x10C  -> 0x11
+
+
+
+bitwise operations
+&     andl s, d    stored in d
+|     orl  s, d
+^     xorl s, d
+~     notl d
+<<    sall k,d   d <- d<<k // arithmetic left shift
+<<    shll k,d   d <- d<<k // logical left shift
+>>    sarl k,d   d <- d>>k // arithmetic right shift (fill with msb - signed
+>>    shrl k,d   d <- d>>k // logical right shift (fill with 0 - unsigned)
+
+
+
+
+
+
+
+

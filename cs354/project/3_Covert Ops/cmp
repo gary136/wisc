@@ -1,0 +1,8 @@
+cmp b, a
+jx done
+
+-> 
+if (a !x b)
+assume not meet
+jump done
+otherwise continue statement after if

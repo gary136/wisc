@@ -1,0 +1,42 @@
+Which conversion would you like to do?
+  1. Binary to Decimal
+  2. Hex to Decimal
+  3. Decimal to Binary
+  4. Decimal to Hex
+  q to Quit
+Please enter binary string here: Binary: 0101
+Decimal: 5
+
+Which conversion would you like to do?
+  1. Binary to Decimal
+  2. Hex to Decimal
+  3. Decimal to Binary
+  4. Decimal to Hex
+  q to Quit
+Please enter hex string here (do include the 0x prefix): Hex: 0XF3
+Decimal: 243
+
+Which conversion would you like to do?
+  1. Binary to Decimal
+  2. Hex to Decimal
+  3. Decimal to Binary
+  4. Decimal to Hex
+  q to Quit
+Please enter decimal number here: Decimal: 5
+binary: 101
+
+Which conversion would you like to do?
+  1. Binary to Decimal
+  2. Hex to Decimal
+  3. Decimal to Binary
+  4. Decimal to Hex
+  q to Quit
+Please enter decimal number here: Decimal: 243
+Hex: 0XF3
+
+Which conversion would you like to do?
+  1. Binary to Decimal
+  2. Hex to Decimal
+  3. Decimal to Binary
+  4. Decimal to Hex
+  q to Quit
