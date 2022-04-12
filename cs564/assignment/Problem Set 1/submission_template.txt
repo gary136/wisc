@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<pset>
+
+    <!--
+        CS 564, FALL 2021
+        PROBLEM SET 1 SUBMISSION TEMPLATE
+
+        Please copy and paste your SQL queries into the appropriate spots below. 
+
+        When submitting SQL queries, please do not include the initial 
+        %sql or %%sql IPython commands. Just include the SQL code.
+
+        DO NOT DELETE THE <![CDATA[ ... ]]> LINES IN EACH <answer> TAG!
+        Doing so will break the autograder. To avoid accidentally breaking
+        something, please leave all existing comments in this template
+        intact in your submission.
+    -->
+
+    <student>
+        <name>
+            <!-- Insert your full name on the line below. -->
+            Hung Ting Lee
+        </name>
+        <netid>
+            <!-- Insert your NetID (NOT your student ID number!) below. -->
+            hlee864
+        </netid>
+        <studentid>
+            <!-- Insert your student ID number below. -->
+            9083057233
+        </studentid>
+    </student>
+
+
+    <!-- BEGIN PROBLEM 1 -->
+    <answer number="1a">
+        <!-- Paste your solution to problem 1, part (a) below this line. --><![CDATA[
+        select A.i, A.j, A.val+B.val val from A
+        join B on A.i=B.i and A.j=B.j;
+        
+
+        ]]><!-- End problem 1, part (a). -->
+    </answer>
+    <answer number="1b">
+        <!-- Paste your solution to problem 1, part (b) below this line. --><![CDATA[
+        select sum(A.val*B.val) DotProduct from A 
+        join B on A.i=B.i and A.j=2 and B.j=1;
+
+
+        ]]><!-- End problem 1, part (b). -->
+    </answer>
+    <answer number="1c">
+        <!-- Paste your solution to problem 1, part (c) below this line. --><![CDATA[
+        select A.i, B.j, sum(A.val*B.val) val from A 
+        join B on A.j=B.i
+        group by A.i, B.j;
+
+
+        ]]><!-- End problem 1, part (c). -->
+    </answer>
+    <answer number="1d">
+        <!-- Paste your solution to problem 1, part (d) below this line. --><![CDATA[
+        select A1.i, A2.j, sum(A1.val*A2.val) val 
+        from(select A1.i, A2.j, sum(A1.val*A2.val) val 
+            from(
+                select A1.i, A2.j, sum(A1.val*A2.val) val 
+                from A A1 join A A2 on A1.j=A2.i
+                group by A1.i, A2.j
+                )A1 join A A2 on A1.j=A2.i
+            group by A1.i, A2.j
+        )A1 join A A2 on A1.j=A2.i
+        group by A1.i, A2.j;
+
+
+        ]]><!-- End problem 1, part (d). -->
+    </answer>
+    <!-- END PROBLEM 1 -->
+
+
+    <!-- BEGIN PROBLEM 2 -->
+    <answer number="2a">
+        <!-- Paste your solution to problem 2, part (a) below this line. --><![CDATA[
+        select SH.store Store, sum(SH.AllSales) AllSales
+        from (
+        select S.store, S.weekdate, sum(S.weeklysales) AllSales 
+        from Sales S join Holidays H on S.weekdate=H.weekdate
+        where H.isholiday = "TRUE"
+        group by 1,2
+        )SH
+        group by 1
+        order by 2 desc
+        limit 1;
+
+
+        ]]><!-- End problem 2, part (a). -->
+    </answer>
+    <answer number="2b">
+        <!-- Paste your solution to problem 2, part (b) below this line. --><![CDATA[
+        select count(1) NumNonHolidays from(
+            select S.weekdate, sum(S.weeklysales) AllSales
+            from Sales S join Holidays H on S.weekdate=H.weekdate
+            where H.isholiday = "FALSE"
+            group by 1
+            having AllSales>
+            (
+                select avg(AllSales) AvgSales 
+                from(select S.weekdate, sum(S.weeklysales) AllSales
+                    from Sales S join Holidays H on S.weekdate=H.weekdate
+                    where H.isholiday = "TRUE"
+                    group by 1)
+            )
+        );
+
+
+        ]]><!-- End problem 2, part (b). -->
+    </answer>
+    <answer number="2c">
+        <!-- Paste your solution to problem 2, part (c) below this line. --><![CDATA[
+        select St.type, sum(Sa.weeklysales) weeklysales
+        from Stores St join Sales Sa on St.store=Sa.store
+        where weekdate like '%-06-%' or weekdate like '%-07-%' or weekdate like '%-08-%'
+        group by 1;
+
+
+        ]]><!-- End problem 2, part (c). -->
+    </answer>
+    <!-- END PROBLEM 2 -->
+
+
+    <!-- BEGIN PROBLEM 3 -->
+    <answer number="3a">
+        <!-- Paste your solution to problem 3, part (a) below this line. --><![CDATA[
+        SELECT B company, d distance FROM streets
+        where A='UW-Madison' and d<=9 
+        union
+        select X2.B company, x1.d+x2.d d12
+        from streets X1 join streets X2 on X1.B=X2.A and X1.direction = X2.direction
+        where X1.A = 'UW-Madison' and d12<=9;
+
+
+        ]]><!-- End problem 3, part (a). -->
+    </answer>
+    <answer number="3b">
+        <!-- Paste your solution to problem 3, part (b) below this line. --><![CDATA[
+        DROP VIEW IF EXISTS F;
+        CREATE VIEW F AS 
+        SELECT id path, A U, B company, d FROM streets
+        where A='UW-Madison' and d<=15 
+        union
+        select X2.id, X1.A, X2.B company, x1.d+x2.d d12
+        from streets X1 join streets X2 on X1.B=X2.A and X1.direction = X2.direction
+        where X1.A = 'UW-Madison' and d12<=15;
+
+        DROP VIEW IF EXISTS R;
+        CREATE VIEW R AS 
+        SELECT id path, A company, B U, d FROM streets
+        where B='UW-Madison' and d<=15 
+        union
+        select X1.id, X2.A company, X1.B, x1.d+x2.d d12
+        from streets X1 join streets X2 on X1.A=X2.B and X1.direction = X2.direction
+        where X1.B = 'UW-Madison' and d12<=15;
+
+        select F.company company_1, R.company company_2, F.d+R.d distance
+        from F join R on F.U = R.U and F.path>R.path
+        where distance<=15 and company_1!=company_2;
+
+
+        ]]><!-- End problem 3, part (b). -->
+    </answer>
+    <answer number="3c">
+        <!-- Paste your solution to problem 3, part (c) below this line. --><![CDATA[
+        select X1.A, X1.B, X2.B C, (x1.d+x2.d)*2 d
+        from streets X1 join streets X2 on X1.B=X2.A
+        join streets X3 on X2.B=X3.A and X1.A=X3.B
+        where X1.A != 'UW-Madison' and X2.A != 'UW-Madison' and X2.B != 'UW-Madison'
+        and X1.A != X2.B
+        and X1.id < X2.id
+        and X1.id < X3.id
+        and X2.id < X3.id;
+
+
+        ]]><!-- End problem 3, part (c). -->
+    </answer>
+    <!-- END PROBLEM 3 -->
+
+
+</pset>

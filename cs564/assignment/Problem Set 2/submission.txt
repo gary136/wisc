@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<pset>
+
+    <!--
+        CS 564, Fall 2021
+        PROBLEM SET 2 SUBMISSION TEMPLATE
+
+        Please copy and paste your SQL queries (and potentially Python and Latex code) 
+	into the appropriate spots below. 
+
+        When submitting SQL queries, please do not include the intitial 
+        %sql or %%sql IPython commands. Just include the SQL code.
+
+        DO NOT DELETE THE <![CDATA[ ... ]]> LINES IN EACH <answer> TAG!
+        Doing so will break the autograder. To avoid accidentally breaking
+        something, please leave all existing comments in this template
+        intact in your submission.
+    -->
+
+    <student>
+        <name>
+            <!-- Insert your full name on the line below. -->
+            Hung-Ting Lee
+            
+        </name>
+        <netid>
+            <!-- Insert your NetID (NOT your student ID number!) below. -->
+            hlee864
+
+        </netid>
+        <studentid>
+            <!-- Insert your student ID number below. -->
+            9083057233
+            
+        </studentid>
+    </student>
+
+
+    <!-- BEGIN PROBLEM 1 -->
+    <answer number="1a">
+        <!-- Paste your solution to problem 1, part (a) below this line. --><![CDATA[
+        N
+        select provider, count(1) c from hospital 
+        group by provider 
+        having c>1
+
+        ]]><!-- End problem 1, part (a). -->
+    </answer>
+    <answer number="1b">
+        <!-- Paste your solution to problem 1, part (b) below this line. --><![CDATA[
+        Y
+        select zip, count(*) c
+        from (select distinct zip, city, state from hospital)X
+        group by zip
+        having c>1
+
+        ]]><!-- End problem 1, part (b). -->
+    </answer>
+    <!-- END PROBLEM 1 -->
+
+
+    <!-- BEGIN PROBLEM 2 -->
+    <answer number="2a">
+        <!-- Paste your solution to problem 2, part (a) below this line. --><![CDATA[
+        answer = True
+        explanation = "(A, B)'s closure is {A, B, D, E, C, F} i.e. all attributes. Hence, it's a superkey"
+
+        ]]><!-- End problem 2, part (a). -->
+    </answer>
+    <answer number="2b">
+        <!-- Paste your solution to problem 2, part (b) below this line. --><![CDATA[
+        answer = False
+        explanation = "using the chase algorithm, you can not find a row without subscripts"
+
+        ]]><!-- End problem 2, part (b). -->
+    </answer>    
+    <answer number="2c">
+        <!-- Paste your solution to problem 2, part (c) below this line. --><![CDATA[
+        answer = False
+        explanation = "R1=ABC, R2=CDE, R3=EFA;  (F1 ∪ F2 ∪ F3)+ != F+"
+
+        ]]><!-- End problem 2, part (c). -->
+    </answer>
+    <answer number="2d">
+        <!-- Paste your solution to problem 2, part (d) below this line. --><![CDATA[
+        answer = True
+        explanation = "A→D, D→F, so A→F via transivity, also there is A→E, hence A→E, F"
+
+        ]]><!-- End problem 2, part (d). -->
+    </answer>
+    <answer number="2e">
+        <!-- Paste your solution to problem 2, part (e) below this line. --><![CDATA[
+        answer = False
+        explanation = "A -> D but A is not a superkey (A->A, C, D, E, F)"
+
+        ]]><!-- End problem 2, part (e). -->
+    </answer>
+    <!-- END PROBLEM 2 -->
+
+    <!-- BEGIN PROBLEM 3 -->
+    <answer number="3a">
+        <!-- Paste your solution to problem 3, part (a) below this line. --><![CDATA[
+        $\pi_{name}(\pi_{pid, artid}(Author \bowtie Article \bowtie (\sigma_{year=2019}(Conference))) \bowtie \pi_{pid, name}(\sigma_{affiliation="UW-Madison"}(Person)))$
+
+        ]]><!-- End problem 3, part (a). -->
+    </answer>
+    <answer number="3b">
+        <!-- Paste your solution to problem 3, part (b) below this line. --><![CDATA[
+        $\pi_{name}(\pi_{pid, artid}(Author \bowtie Article \bowtie (\sigma_{name="John Doe"} (Conference))) \bowtie \pi_{pid, name}(\sigma_{name!="John Doe"}(Person)))$
+
+        ]]><!-- End problem 3, part (b). -->
+    </answer>
+    <answer number="3c">
+        <!-- Paste your solution to problem 3, part (c) below this line. --><![CDATA[
+        $\gamma_{Count(pid)}((\pi_{pid, artid}(Author \bowtie Article \bowtie (\sigma_{year=2018 and name="SIGMOD"} (Conference)))-\pi_{pid, artid}(Author \bowtie Article \bowtie (\sigma_{year=2019 and name="SIGMOD"} (Conference)))))$
+
+        ]]><!-- End problem 3, part (c). -->
+    </answer>
+    <answer number="3d">
+    <!-- Paste your solution to problem 3, part (d) below this line. --><![CDATA[
+        $\gamma_{pid, Count(A.artid)}(Article \bowtie (\sigma_{name="SIGMOD"}(Conference)) \bowtie Author)$
+
+        ]]><!-- End problem 3, part (d). -->
+    </answer>
+    <!-- END PROBLEM 3 -->
+
+</pset>
