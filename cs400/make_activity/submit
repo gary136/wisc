@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+ACTIVITYNAME="02.MakeAndJavaDevelopmentActivity"
+check() {
+    SIZE=$(du -s | cut -f 1) # ensure folder size is under 2MB
+    if [[ $SIZE -gt 2048 ]]; then abort "submission too large: $SIZE > 2048 limit"; fi
+    # make additional checks as needed
+}
+
+main() {
+    read -p "Enter your CSL username: " USERNAME
+    if [[ $# -eq 0 ]]; then  # submit contents of current folder
+	submit
+    elif [[ $1 == -download ]]; then # retrieve archive or recent submission
+	download
+    elif [[ $1 == -feedback ]]; then # display score and feedback after grading
+	feedback
+    else # display usage message
+        echo 'Usage: submit [-download | -feedback]'
+        echo 'Run "submit" to record the contents of your working directory as a submission for this activity.'
+        echo 'Run "submit -download" to retrieve an archive ofyour most recent submission in a file named recent.tar.gz.'
+        echo 'Run "submit -feedback" to see your score and feedback for this activity after is has been graded.'
+    fi
+}
+
+submit() {
+    echo "Checking submission contents... "
+    check
+    echo "Transferring files (you may be prompted for your csl password for this)... "
+    SUBMISSION=$(TZ=UTC+6 date +"%Y.%m.%d-%H.%M.%S")
+    rsync -r * --rsync-path="mkdir -p /p/course/cs400/activities/submissions/${USERNAME}/${ACTIVITYNAME} && rsync" ${USERNAME}@best-linux.cs.wisc.edu:/p/course/cs400/activities/submissions/${USERNAME}/${ACTIVITYNAME}/${SUBMISSION}/
+    if [[ $? -ne 0 ]]; then abort "File transfer failed."; fi    
+    echo -e "\e[32mSUBMISSION SUCCESSFUL:\e[0m checked and transferred."
+}
+
+abort() {
+    echo -e "\e[31m$1\e[0m"
+    exit 1
+}
+
+download() {
+    echo "Building and retrieving archive (you may be prompted for your csl password for this)... "
+    rsync ${USERNAME}@best-linux.cs.wisc.edu:~/recent.tar.gz . --rsync-path="tar -czf ~/recent.tar.gz -C /p/course/cs400/activities/submissions/${USERNAME}/${ACTIVITYNAME}/ \$(ls /p/course/cs400/activities/submissions/${USERNAME}/${ACTIVITYNAME}/ | sort -n | tail -1) && rsync"
+    echo -e "\e[32mDOWNLOAD SUCCESSFUL.\e[0m"
+}
+
+feedback() {
+    echo "Retrieving activity feedback (you may be prompted for your csl password for this)... "
+    ssh ${USERNAME}@best-linux.cs.wisc.edu "if [[ -f /p/course/cs400/activities/submissions/${USERNAME}/feedback/${ACTIVITYNAME}.txt ]]; then cat /p/course/cs400/activities/submissions/${USERNAME}/feedback/${ACTIVITYNAME}.txt; else echo 'Grades and feedback for this activity are not yet ready. Please check back one week after the hard deadline for this activity has passed.' ; fi"
+}
+
+main "$@"

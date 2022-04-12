@@ -1,0 +1,103 @@
+<html><head><title>Dessert in the Desert Game</title>
+  <style>
+
+      /*CSS Section Code goes here */
+
+      button {
+        color: blanchedalmond;
+        background-color: chocolate;
+        border-color: chocolate;
+        position: absolute;
+
+        /* Set the width and height of your button to 80px wide by 32px tall */
+        width: 80px;
+        height: 32px;
+
+        /* set the text size to 16px */
+        font-size:16px;
+      }
+
+      button:hover {
+        /* swaps the color and background color */
+        color: chocolate;
+        background-color: blanchedalmond;
+      }
+
+      body {
+        background-color: SandyBrown;
+
+      }
+
+  </style>
+
+  <script>
+
+  /* JavaScript Section Code goes here */
+
+  function randomizeButtonPositions() {
+    var buttons = document.querySelectorAll("button");
+    buttons.forEach( (b) => {
+      b.style.left = (Math.random()*80+10)+"%";
+      b.style.top = (Math.random()*80+10)+"%";
+    } );
+  }
+  // a variable named score with an initial value of zero
+  var score = 0;
+
+  // create a new javascript method called handleDessertClick
+  function handleDessertClick() {
+    // 1. Increment the value of the score value by one.
+    score++;
+
+    // 2. Update the paragraph text that is being displayed on 
+    // the page to reflect this new score instead of the old one
+    var p = document.querySelectorAll("p"); // -> this generates a list
+
+    p[0].innerHTML = "Score: "+score;
+
+    // 3. Call the randomizeButtonPositions method to move all 
+    // of the buttons to a new position. Once this function is working, 
+    // you should have it be called from the onclick callback attribute of your Dessert button
+    randomizeButtonPositions();
+  }
+
+  // create a method called handleDesertClick
+  function handleDesertClick() {
+    // do everything that the handleDessertClick was doing with one exception:
+    // decrement instead of increment the score by one
+    score--;
+
+    // 2. Update the paragraph text that is being displayed on 
+    // the page to reflect this new score instead of the old one
+    var p = document.querySelectorAll("p"); // -> this generates a list
+
+    p[0].innerHTML = "Score: "+score;
+
+    // 3. Call the randomizeButtonPositions method to move all 
+    // of the buttons to a new position. Once this function is working, 
+    // you should have it be called from the onclick callback attribute of your Dessert button
+    randomizeButtonPositions();
+  }
+
+  </script>
+
+</head>
+
+  <body onload="randomizeButtonPositions()">
+
+    <p>Score: 0</p>
+
+    <button onclick="handleDessertClick()">Dessert</button>
+
+    <!-- add 7 more buttons with the label Desert, rather than Dessert. -->
+    <button onclick="handleDesertClick()">Desert</button>
+    <button onclick="handleDesertClick()">Desert</button>
+    <button onclick="handleDesertClick()">Desert</button>
+    <button onclick="handleDesertClick()">Desert</button>
+    <button onclick="handleDesertClick()">Desert</button>
+    <button onclick="handleDesertClick()">Desert</button>
+    <button onclick="handleDesertClick()">Desert</button>
+
+  </body>
+  
+</html>
